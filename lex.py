@@ -7,14 +7,32 @@ reserved = {
 # List of token names.   This is always required
 tokens = (
     'EQUALS',
+    'PLUS',
+    'MINUS',
+    'TIMES',
+    'DIVIDE',
+    'LPAREN',
+    'RPAREN',
+    'NUMBER',
     'STRING',
     'ID',
     'NEWLINE',
 ) + tuple(reserved.values())
 
+t_PLUS = r'\+'
+t_MINUS = r'-'
+t_TIMES = r'\*'
+t_DIVIDE = r'/'
+t_LPAREN = r'\('
+t_RPAREN = r'\)'
 t_EQUALS = r'='
 
 # Regular expression rules for simple tokens
+
+def t_NUMBER(t):
+    r'\d+'
+    t.value = int(t.value)
+    return t
 
 def t_STRING(t):
     r'"[^"]*"'

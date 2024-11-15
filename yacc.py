@@ -5,6 +5,11 @@ import ast
 
 py_ast = ast.Module(body=[], type_ignores=[])
 
+precedence = (
+    ('left', 'PLUS', 'MINUS'),
+    ('left', 'TIMES', 'DIVIDE'),
+)
+
 def p_program(p):
     '''program : program command
                | command'''
@@ -39,6 +44,31 @@ def p_assign(p):
 def p_load(p):
     'expression : ID'
     p[0] = ast.Name(id=p[1], ctx=ast.Load())
+
+def p_expression_binop(p):
+    '''expression : expression PLUS expression
+                  | expression MINUS expression
+                  | expression TIMES expression
+                  | expression DIVIDE expression
+                  | NUMBER'''
+    if len(p) == 4:
+        p[0] = ast.BinOp(
+            left=p[1],
+            op={
+                '+': ast.Add(),
+                '-': ast.Sub(),
+                '*': ast.Mult(),
+                '/': ast.Div(),
+            }[p[2]],
+            right=p[3]
+        )
+    else:
+        p[0] = ast.Constant(value=p[1])
+
+def p_expression_group(p):
+    'expression : LPAREN expression RPAREN'
+    p[0] = p[2]
+        
 
 def p_expression_string(p):
     'expression : STRING'

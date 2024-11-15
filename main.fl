@@ -1,2 +1,2 @@
-my_var = "test"
-paint "hello"
+my_var = 5 + 6*4
+paint my_var

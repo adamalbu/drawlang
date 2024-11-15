@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'EQUALS ID NEWLINE PAINT STRINGprogram : program command\n               | commandcommand : PAINT expressioncommand : ID EQUALS expressionexpression : IDexpression : STRING'
+_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDEDIVIDE EQUALS ID LPAREN MINUS NEWLINE NUMBER PAINT PLUS RPAREN STRING TIMESprogram : program command\n               | commandcommand : PAINT expressioncommand : ID EQUALS expressionexpression : IDexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expression\n                  | NUMBERexpression : LPAREN expression RPARENexpression : STRING'
     
-_lr_action_items = {'PAINT':([0,1,2,5,6,7,8,10,],[3,3,-2,-1,-3,-5,-6,-4,]),'ID':([0,1,2,3,5,6,7,8,9,10,],[4,4,-2,7,-1,-3,-5,-6,7,-4,]),'$end':([1,2,5,6,7,8,10,],[0,-2,-1,-3,-5,-6,-4,]),'STRING':([3,9,],[8,8,]),'EQUALS':([4,],[9,]),}
+_lr_action_items = {'PAINT':([0,1,2,5,6,7,8,10,17,18,19,20,21,22,],[3,3,-2,-1,-3,-5,-10,-12,-4,-6,-7,-8,-9,-11,]),'ID':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,21,22,],[4,4,-2,7,-1,-3,-5,-10,7,-12,7,7,7,7,7,-4,-6,-7,-8,-9,-11,]),'$end':([1,2,5,6,7,8,10,17,18,19,20,21,22,],[0,-2,-1,-3,-5,-10,-12,-4,-6,-7,-8,-9,-11,]),'NUMBER':([3,9,11,12,13,14,15,],[8,8,8,8,8,8,8,]),'LPAREN':([3,9,11,12,13,14,15,],[9,9,9,9,9,9,9,]),'STRING':([3,9,11,12,13,14,15,],[10,10,10,10,10,10,10,]),'EQUALS':([4,],[11,]),'PLUS':([6,7,8,10,16,17,18,19,20,21,22,],[12,-5,-10,-12,12,12,-6,-7,-8,-9,-11,]),'MINUS':([6,7,8,10,16,17,18,19,20,21,22,],[13,-5,-10,-12,13,13,-6,-7,-8,-9,-11,]),'TIMES':([6,7,8,10,16,17,18,19,20,21,22,],[14,-5,-10,-12,14,14,14,14,-8,-9,-11,]),'DIVIDE':([6,7,8,10,16,17,18,19,20,21,22,],[15,-5,-10,-12,15,15,15,15,-8,-9,-11,]),'RPAREN':([7,8,10,16,18,19,20,21,22,],[-5,-10,-12,22,-6,-7,-8,-9,-11,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'command':([0,1,],[2,5,]),'expression':([3,9,],[6,10,]),}
+_lr_goto_items = {'program':([0,],[1,]),'command':([0,1,],[2,5,]),'expression':([3,9,11,12,13,14,15,],[6,16,17,18,19,20,21,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,10 +27,16 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> program","S'",1,None,None,None),
-  ('program -> program command','program',2,'p_program','yacc.py',9),
-  ('program -> command','program',1,'p_program','yacc.py',10),
-  ('command -> PAINT expression','command',2,'p_paint','yacc.py',23),
-  ('command -> ID EQUALS expression','command',3,'p_assign','yacc.py',37),
-  ('expression -> ID','expression',1,'p_load','yacc.py',46),
-  ('expression -> STRING','expression',1,'p_expression_string','yacc.py',50),
+  ('program -> program command','program',2,'p_program','yacc.py',14),
+  ('program -> command','program',1,'p_program','yacc.py',15),
+  ('command -> PAINT expression','command',2,'p_paint','yacc.py',28),
+  ('command -> ID EQUALS expression','command',3,'p_assign','yacc.py',38),
+  ('expression -> ID','expression',1,'p_load','yacc.py',45),
+  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','yacc.py',49),
+  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','yacc.py',50),
+  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','yacc.py',51),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','yacc.py',52),
+  ('expression -> NUMBER','expression',1,'p_expression_binop','yacc.py',53),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','yacc.py',69),
+  ('expression -> STRING','expression',1,'p_expression_string','yacc.py',74),
 ]
