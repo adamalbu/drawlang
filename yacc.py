@@ -23,32 +23,26 @@ def p_paint(p):
     'command : PAINT expression'
     p[0] = ast.Expr(
         value=ast.Call(
-            func=ast.Name(id='print', ctx=ast.Load(), lineno=p.lineno(1), col_offset=p.lexpos(1)),
+            func=ast.Name(id='print', ctx=ast.Load()),
             args=[p[2]],
-            keywords=[],
-            lineno=p.lineno(1),
-            col_offset=p.lexpos(1)
-        ),
-        lineno=p.lineno(1),
-        col_offset=p.lexpos(1)
+            keywords=[]
+        )
     )
 
 def p_assign(p):
     'command : ID EQUALS expression'
     p[0] = ast.Assign(
-        targets=[ast.Name(id=p[1], ctx=ast.Store(), lineno=p.lineno(1), col_offset=p.lexpos(1))],
-        value=p[3],
-        lineno=p.lineno(2),
-        col_offset=p.lexpos(2)
+        targets=[ast.Name(id=p[1], ctx=ast.Store())],
+        value=p[3]
     )
 
 def p_load(p):
     'expression : ID'
-    p[0] = ast.Name(id=p[1], ctx=ast.Load(), lineno=p.lineno(1), col_offset=p.lexpos(1))
+    p[0] = ast.Name(id=p[1], ctx=ast.Load())
 
 def p_expression_string(p):
     'expression : STRING'
-    p[0] = ast.Constant(value=p[1][1:-1], lineno=p.lineno(1), col_offset=p.lexpos(1))  # Remove quotes
+    p[0] = ast.Constant(value=p[1][1:-1])  # Remove quotes
 
 def p_error(p):
     if p:
@@ -68,9 +62,10 @@ with open('main.fl', 'r') as file:
 # Parse and generate the AST
 parser.parse(data)
 
-# Print the AST for debugging
-print(ast.dump(py_ast, indent=4))
-
 # Execute the AST
-compile(py_ast, filename='test', mode='exec')
-# exec(compile(py_ast, filename='test', mode='exec'))
+ast.fix_missing_locations(py_ast)
+# compile(py_ast, filename='test', mode='exec')
+
+# Print the AST for debugging
+# print(ast.dump(py_ast, indent=4))
+exec(compile(py_ast, filename='test', mode='exec'))
