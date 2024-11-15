@@ -2,8 +2,6 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    EQUALS
-    ID
     NEWLINE
 
 Grammar
@@ -12,21 +10,23 @@ Rule 0     S' -> program
 Rule 1     program -> program command
 Rule 2     program -> command
 Rule 3     command -> PAINT expression
-Rule 4     expression -> STRING
+Rule 4     command -> ID EQUALS expression
+Rule 5     expression -> ID
+Rule 6     expression -> STRING
 
 Terminals, with rules where they appear
 
-EQUALS               : 
-ID                   : 
+EQUALS               : 4
+ID                   : 4 5
 NEWLINE              : 
 PAINT                : 3
-STRING               : 4
+STRING               : 6
 error                : 
 
 Nonterminals, with rules where they appear
 
 command              : 1 2
-expression           : 3
+expression           : 3 4
 program              : 1 0
 
 Parsing method: LALR
@@ -37,8 +37,10 @@ state 0
     (1) program -> . program command
     (2) program -> . command
     (3) command -> . PAINT expression
+    (4) command -> . ID EQUALS expression
 
     PAINT           shift and go to state 3
+    ID              shift and go to state 4
 
     program                        shift and go to state 1
     command                        shift and go to state 2
@@ -48,48 +50,92 @@ state 1
     (0) S' -> program .
     (1) program -> program . command
     (3) command -> . PAINT expression
+    (4) command -> . ID EQUALS expression
 
     PAINT           shift and go to state 3
+    ID              shift and go to state 4
 
-    command                        shift and go to state 4
+    command                        shift and go to state 5
 
 state 2
 
     (2) program -> command .
 
     PAINT           reduce using rule 2 (program -> command .)
+    ID              reduce using rule 2 (program -> command .)
     $end            reduce using rule 2 (program -> command .)
 
 
 state 3
 
     (3) command -> PAINT . expression
-    (4) expression -> . STRING
+    (5) expression -> . ID
+    (6) expression -> . STRING
 
-    STRING          shift and go to state 6
+    ID              shift and go to state 7
+    STRING          shift and go to state 8
 
-    expression                     shift and go to state 5
+    expression                     shift and go to state 6
 
 state 4
 
-    (1) program -> program command .
+    (4) command -> ID . EQUALS expression
 
-    PAINT           reduce using rule 1 (program -> program command .)
-    $end            reduce using rule 1 (program -> program command .)
+    EQUALS          shift and go to state 9
 
 
 state 5
 
-    (3) command -> PAINT expression .
+    (1) program -> program command .
 
-    PAINT           reduce using rule 3 (command -> PAINT expression .)
-    $end            reduce using rule 3 (command -> PAINT expression .)
+    PAINT           reduce using rule 1 (program -> program command .)
+    ID              reduce using rule 1 (program -> program command .)
+    $end            reduce using rule 1 (program -> program command .)
 
 
 state 6
 
-    (4) expression -> STRING .
+    (3) command -> PAINT expression .
 
-    PAINT           reduce using rule 4 (expression -> STRING .)
-    $end            reduce using rule 4 (expression -> STRING .)
+    PAINT           reduce using rule 3 (command -> PAINT expression .)
+    ID              reduce using rule 3 (command -> PAINT expression .)
+    $end            reduce using rule 3 (command -> PAINT expression .)
+
+
+state 7
+
+    (5) expression -> ID .
+
+    PAINT           reduce using rule 5 (expression -> ID .)
+    ID              reduce using rule 5 (expression -> ID .)
+    $end            reduce using rule 5 (expression -> ID .)
+
+
+state 8
+
+    (6) expression -> STRING .
+
+    PAINT           reduce using rule 6 (expression -> STRING .)
+    ID              reduce using rule 6 (expression -> STRING .)
+    $end            reduce using rule 6 (expression -> STRING .)
+
+
+state 9
+
+    (4) command -> ID EQUALS . expression
+    (5) expression -> . ID
+    (6) expression -> . STRING
+
+    ID              shift and go to state 7
+    STRING          shift and go to state 8
+
+    expression                     shift and go to state 10
+
+state 10
+
+    (4) command -> ID EQUALS expression .
+
+    PAINT           reduce using rule 4 (command -> ID EQUALS expression .)
+    ID              reduce using rule 4 (command -> ID EQUALS expression .)
+    $end            reduce using rule 4 (command -> ID EQUALS expression .)
 

@@ -1,2 +1,2 @@
-paint "test"
+my_var = "test"
 paint "hello"
