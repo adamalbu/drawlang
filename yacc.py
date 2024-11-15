@@ -6,13 +6,19 @@ import ast
 py_ast = ast.Module(body=[], type_ignores=[])
 
 def p_program(p):
-    'program : command'
-    p[0] = ast.Module(
-        body=[ast.Expr(value=p[1], lineno=1, col_offset=0)],
+    '''program : program command
+               | command'''
+    if len(p) == 3:
+        p[0] = p[1] + [p[2]]  # Accumulate commands
+    else:
+        p[0] = [p[1]]  # Single command
+
+    # Wrap commands in Expr and build the module
+    global py_ast
+    py_ast = ast.Module(
+        body=[ast.Expr(value=cmd, lineno=1, col_offset=0) for cmd in p[0]],
         type_ignores=[]
     )
-    global py_ast
-    py_ast = p[0]
 
 def p_paint(p):
     'command : PAINT expression'

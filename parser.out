@@ -9,32 +9,34 @@ Unused terminals:
 Grammar
 
 Rule 0     S' -> program
-Rule 1     program -> command
-Rule 2     command -> PAINT expression
-Rule 3     expression -> STRING
+Rule 1     program -> program command
+Rule 2     program -> command
+Rule 3     command -> PAINT expression
+Rule 4     expression -> STRING
 
 Terminals, with rules where they appear
 
 EQUALS               : 
 ID                   : 
 NEWLINE              : 
-PAINT                : 2
-STRING               : 3
+PAINT                : 3
+STRING               : 4
 error                : 
 
 Nonterminals, with rules where they appear
 
-command              : 1
-expression           : 2
-program              : 0
+command              : 1 2
+expression           : 3
+program              : 1 0
 
 Parsing method: LALR
 
 state 0
 
     (0) S' -> . program
-    (1) program -> . command
-    (2) command -> . PAINT expression
+    (1) program -> . program command
+    (2) program -> . command
+    (3) command -> . PAINT expression
 
     PAINT           shift and go to state 3
 
@@ -44,35 +46,50 @@ state 0
 state 1
 
     (0) S' -> program .
+    (1) program -> program . command
+    (3) command -> . PAINT expression
 
+    PAINT           shift and go to state 3
 
+    command                        shift and go to state 4
 
 state 2
 
-    (1) program -> command .
+    (2) program -> command .
 
-    $end            reduce using rule 1 (program -> command .)
+    PAINT           reduce using rule 2 (program -> command .)
+    $end            reduce using rule 2 (program -> command .)
 
 
 state 3
 
-    (2) command -> PAINT . expression
-    (3) expression -> . STRING
+    (3) command -> PAINT . expression
+    (4) expression -> . STRING
 
-    STRING          shift and go to state 5
+    STRING          shift and go to state 6
 
-    expression                     shift and go to state 4
+    expression                     shift and go to state 5
 
 state 4
 
-    (2) command -> PAINT expression .
+    (1) program -> program command .
 
-    $end            reduce using rule 2 (command -> PAINT expression .)
+    PAINT           reduce using rule 1 (program -> program command .)
+    $end            reduce using rule 1 (program -> program command .)
 
 
 state 5
 
-    (3) expression -> STRING .
+    (3) command -> PAINT expression .
 
-    $end            reduce using rule 3 (expression -> STRING .)
+    PAINT           reduce using rule 3 (command -> PAINT expression .)
+    $end            reduce using rule 3 (command -> PAINT expression .)
+
+
+state 6
+
+    (4) expression -> STRING .
+
+    PAINT           reduce using rule 4 (expression -> STRING .)
+    $end            reduce using rule 4 (expression -> STRING .)
 
