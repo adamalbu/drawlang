@@ -8,39 +8,11 @@ py_ast = ast.Module(body=[], type_ignores=[])
 fixed_setup = [
     ast.Import(names=[ast.alias(name='pygame')]),
     # pygame.init()
-    ast.Expr(
-        value=ast.Call(
-            func=ast.Attribute(
-                value=ast.Name(id='pygame', ctx=ast.Load()),
-                attr='init',
-                ctx=ast.Load()
-            ),
-            args=[],
-            keywords=[]
-        )
-    ),
+    ast.parse('pygame.init()').body[0],
     # __clock__ = pygame.time.Clock()
-    ast.Assign(
-        targets=[ast.Name(id='__clock__', ctx=ast.Store())],
-        value=ast.Call(
-            func=ast.Attribute(
-                value=ast.Attribute(
-                    value=ast.Name(id='pygame', ctx=ast.Load()),
-                    attr='time',
-                    ctx=ast.Load()
-                ),
-                attr='Clock',
-                ctx=ast.Load()
-            ),
-            args=[],
-            keywords=[]
-        )
-    ),
+    ast.parse('__clock__ = pygame.time.Clock()').body[0],
     # __running__ = True
-    ast.Assign(
-        targets=[ast.Name(id='__running__', ctx=ast.Store())],
-        value=ast.Constant(value=True)
-    ),
+    ast.parse('__running__ = True').body[0],
 ]
 user_setup = []
 
@@ -165,13 +137,13 @@ def p_group_tup3(p):
     else:
         p[0] = ast.Constant(value=(p[1], p[2], p[3]))
 
-# def p_group_tup2(p):
-#     '''group2 : LPAREN NUM NUM RPAREN
-#               | NUM NUM'''
-#     if len(p) == 5:
-#         p[0] = ast.Constant(value=(p[2], p[3]))
-#     else:
-#         p[0] = ast.Constant(value=(p[1], p[2]))
+def p_group_tup2(p):
+    '''group2 : LPAREN NUM NUM RPAREN
+              | NUM NUM'''
+    if len(p) == 5:
+        p[0] = ast.Constant(value=(p[2], p[3]))
+    else:
+        p[0] = ast.Constant(value=(p[1], p[2]))
 
 def p_error(p):
     if p:
@@ -191,6 +163,6 @@ with open('main.fl', 'r') as file:
 parser.parse(data)
 
 ast.fix_missing_locations(py_ast)
-print(ast.dump(py_ast, indent=4))
+# print(ast.dump(py_ast, indent=4))
 
 exec(compile(py_ast, filename='test', mode='exec'))
