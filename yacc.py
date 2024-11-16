@@ -62,79 +62,12 @@ def p_start(p):
     while_loop = ast.While(
         test=ast.Name(id='__running__', ctx=ast.Load()),
         body= [
-            # for event in pygame.event.get():
-            #     if event.type == pygame.QUIT:
-            #         __running__ = False
-            ast.For(
-                target=ast.Name(id='event', ctx=ast.Store()),
-                iter=ast.Call(
-                    func=ast.Attribute(
-                        value=ast.Attribute(
-                            value=ast.Name(id='pygame', ctx=ast.Load()),
-                            attr='event',
-                            ctx=ast.Load()
-                        ),
-                        attr='get',
-                        ctx=ast.Load()
-                    ),
-                    args=[],
-                    keywords=[]
-                ),
-                body=[
-                    ast.If(
-                        test=ast.Compare(
-                            left=ast.Attribute(
-                                value=ast.Name(id='event', ctx=ast.Load()),
-                                attr='type',
-                                ctx=ast.Load()
-                            ),
-                            ops=[ast.Eq()],
-                            comparators=[ast.Attribute(
-                                value=ast.Name(id='pygame', ctx=ast.Load()),
-                                attr='QUIT',
-                                ctx=ast.Load()
-                            )]
-                        ),
-                        body=[
-                            ast.Assign(
-                                targets=[ast.Name(id='__running__', ctx=ast.Store())],
-                                value=ast.Constant(value=False)
-                            )
-                        ],
-                        orelse=[]
-                    )
-                ],
-                orelse=[]
-            ),
+            ast.parse('''for event in pygame.event.get():
+                            if event.type == pygame.QUIT:
+                                __running__ = False''').body[0],
         ] + loop_body + [
-            # pygame.display.flip()
-            ast.Expr(
-                value=ast.Call(
-                    func=ast.Attribute(
-                        value=ast.Attribute(
-                            value=ast.Name(id='pygame', ctx=ast.Load()),
-                            attr='display',
-                            ctx=ast.Load()
-                        ),
-                        attr='flip',
-                        ctx=ast.Load()
-                    ),
-                    args=[],
-                    keywords=[]
-                )
-            ),
-            # __clock__.tick(60)
-            ast.Expr(
-                value=ast.Call(
-                    func=ast.Attribute(
-                        value=ast.Name(id='__clock__', ctx=ast.Load()),
-                        attr='tick',
-                        ctx=ast.Load()
-                    ),
-                    args=[ast.Constant(value=60)],
-                    keywords=[]
-                )
-            ),
+            ast.parse('pygame.display.flip()').body[0],
+            ast.parse('__clock__.tick(60)').body[0]
         ],
         orelse=[]
     )
