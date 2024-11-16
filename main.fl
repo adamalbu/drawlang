@@ -1,2 +1,5 @@
-canvas "test" (400 400)
-fill "white"
+canvas "test" 300 300
+fill 0 235 124
+col "red"
+pos1 150 150
+circle 100

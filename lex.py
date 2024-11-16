@@ -3,7 +3,12 @@ import ply.lex as lex
 reserved = {
     'sketch' : 'SKETCH',
     'canvas' : 'CANVAS',
+    'pos1' : 'POS1',
+    'pos2' : 'POS2',
+    'col' : 'COL',
+
     'fill': 'FILL',
+    'circle': 'CIRCLE',
 }
 
 # List of token names.   This is always required
@@ -18,8 +23,8 @@ tokens = (
     'NUM',
     'STRING',
     'ID',
-    'TUP2',
-    'TUP3',
+    # 'TUP2',
+    # 'TUP3',
     'NEWLINE',
 ) + tuple(reserved.values())
 
@@ -33,15 +38,15 @@ t_EQUALS = r'='
 
 # Regular expression rules for simple tokens
 
-def t_TUP2(t):
-    r'\(\d+\s\d+\)'
-    t.value = tuple(map(int, t.value[1:-1].split()))
-    return t
+# def t_TUP2(t):
+#     r'\(\d+\s\d+\)'
+#     t.value = tuple(map(int, t.value[1:-1].split()))
+#     return t  
 
-def t_TUP3(t):
-    r'\(\d+\s\d+\s\d+\)'
-    t.value = tuple(map(int, t.value[1:-1].split()))
-    return t
+# def t_TUP3(t):
+#     r'\(\d+\s\d+\s\d+\)'
+#     t.value = tuple(map(int, t.value[1:-1].split()))
+#     return t
 
 def t_NUM(t):
     r'\d+'

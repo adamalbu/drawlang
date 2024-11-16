@@ -4,9 +4,9 @@ from colorama import Fore
 import ast
 
 py_ast = ast.Module(body=[], type_ignores=[])
-
 fixed_setup = [
-    ast.Import(names=[ast.alias(name='pygame')]),
+    ast.parse('import pygame').body[0],
+    ast.parse('import pygame.gfxdraw').body[0],
     # pygame.init()
     ast.parse('pygame.init()').body[0],
     # __clock__ = pygame.time.Clock()
@@ -65,20 +65,40 @@ def p_setup(p):
     user_setup = p[0]
 
 def p_program(p):
-    '''program : program command
+    '''program : command program
                | command'''
     if len(p) == 3:
-        p[0] = p[1] + [p[2]]  # Accumulate commands
+        p[0] = p[1] + p[2]  # Concatenate lists
     else:
-        p[0] = [p[1]]  # Single command
+        p[0] = p[1]  # p[1] is already a list
 
 def p_canvas(p):
-    '''setup_cmd : CANVAS STRING TUP2'''
-    p[0] = ast.parse(f'__screen__ = pygame.display.set_mode({p[3]})').body[0]
+    '''setup_cmd : CANVAS STRING group2'''
+    p[0] = ast.parse(f'__screen__ = pygame.display.set_mode(({p[3]}))').body[0]
+
+def p_pos1(p):
+    '''command : POS1 group2'''
+    p[0] = ast.parse(f'__pos1__ = {p[2]}').body
+
+def p_pos2(p):
+    '''command : POS2 group2'''
+    p[0] = ast.parse(f'__pos2__ = {p[2]}').body
+
+def p_col(p):
+    '''command : COL group3
+               | COL STRING'''
+    p[0] = ast.parse(f'__col__ = pygame.Color({p[2]})').body
+
+def p_circle(p):
+    '''command : CIRCLE NUM'''
+    code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
+pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
+    p[0] = ast.parse(code).body  
 
 def p_fill(p):
-    '''command : FILL STRING'''
-    p[0] = ast.parse(f'__screen__.fill({p[2]})').body[0]
+    '''command : FILL STRING
+               | FILL group3'''
+    p[0] = ast.parse(f'__screen__.fill({p[2]})').body
 
 def p_sketch(p):
     'command : SKETCH expression'
@@ -127,23 +147,23 @@ def p_expression_group(p):
 
 def p_expression_string(p):
     'expression : STRING'
-    p[0] = ast.Constant(value=p[1][1:-1])  # Remove quotes
+    p[0] = p[1][1:-1]  # Remove quotes
 
 def p_group_tup3(p):
     '''group3 : LPAREN NUM NUM NUM RPAREN
               | NUM NUM NUM'''
     if len(p) == 6:
-        p[0] = ast.Constant(value=(p[2], p[3], p[4]))
+        p[0] = (p[2], p[3], p[4])
     else:
-        p[0] = ast.Constant(value=(p[1], p[2], p[3]))
+        p[0] = (p[1], p[2], p[3])
 
 def p_group_tup2(p):
     '''group2 : LPAREN NUM NUM RPAREN
               | NUM NUM'''
     if len(p) == 5:
-        p[0] = ast.Constant(value=(p[2], p[3]))
+        p[0] = (p[2], p[3])
     else:
-        p[0] = ast.Constant(value=(p[1], p[2]))
+        p[0] = (p[1], p[2])
 
 def p_error(p):
     if p:
@@ -160,7 +180,7 @@ parser = yacc.yacc()
 with open('main.fl', 'r') as file:
     data = file.read()
 
-parser.parse(data)
+parser.parse(data, debug=1)
 
 ast.fix_missing_locations(py_ast)
 # print(ast.dump(py_ast, indent=4))
