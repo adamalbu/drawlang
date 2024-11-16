@@ -102,34 +102,39 @@ def p_col_expr(p):
 
 def p_circle(p):
     '''command : CIRCLE NUM
-               | CIRCLE NUM group3
-               | CIRCLE NUM STRING
+               | CIRCLE NUM col_expr
                | CIRCLE NUM group2
-               | CIRCLE NUM group3 group2
-               | CIRCLE NUM STRING group2'''
+               | CIRCLE NUM group2 col_expr'''
+    # radius
+    # radius, color
+    # radius, position
+    # radius, color, position
+    pos1 = '__pos1__[0]'
+    pos2 = '__pos1__[1]'
+    color = '__col__'
     if len(p) == 3:
-        code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
-pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
+        radius = p[2]
     elif len(p) == 4:
-        code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
-pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
-    elif len(p) == 5:
-        code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
-pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
-    elif len(p) == 6:
-        code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
-pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
+        radius = p[2]
+        print("asdf", p[3])
+        if isinstance(p[3], tuple) and len(p[3]) == 2: # 2 values, position
+            pos1 = p[3][0]
+            pos2 = p[3][1]
+        elif isinstance(p[3], tuple) and len(p[3]) == 3: # 3 values, color
+            color = p[3]
+        else: # string, color
+            color = p[3]
     else:
-        code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
-pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
-    
-    # code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
-# pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
+        radius = p[2]
+        pos1 = p[3][0]
+        pos2 = p[3][1]
+        color = p[4]
+    code = f'pygame.gfxdraw.aacircle(__screen__, {pos1}, {pos2}, {radius}, pygame.Color({color}))'
+    code += '\n' + f'pygame.gfxdraw.filled_circle(__screen__, {pos1}, {pos2}, {radius}, pygame.Color({color}))'
     p[0] = ast.parse(code).body  
 
 def p_fill(p):
-    '''command : FILL STRING
-               | FILL group3'''
+    '''command : FILL col_expr'''
     p[0] = ast.parse(f'__screen__.fill({p[2]})').body
 
 def p_sketch(p):
@@ -185,17 +190,17 @@ def p_group_tup3(p):
     '''group3 : LPAREN NUM NUM NUM RPAREN
               | NUM NUM NUM'''
     if len(p) == 6:
-        p[0] = (p[2], p[3], p[4])
+        p[0] = tuple((p[2], p[3], p[4]))
     else:
-        p[0] = (p[1], p[2], p[3])
+        p[0] = tuple((p[1], p[2], p[3]))
 
 def p_group_tup2(p):
     '''group2 : LPAREN NUM NUM RPAREN
               | NUM NUM'''
     if len(p) == 5:
-        p[0] = (p[2], p[3])
+        p[0] = tuple((p[2], p[3]))
     else:
-        p[0] = (p[1], p[2])
+        p[0] = tuple((p[1], p[2]))
 
 def p_error(p):
     if p:
