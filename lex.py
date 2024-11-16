@@ -1,7 +1,9 @@
 import ply.lex as lex
 
 reserved = {
-    'paint' : 'PAINT',
+    'sketch' : 'SKETCH',
+    'canvas' : 'CANVAS',
+    'fill': 'FILL',
 }
 
 # List of token names.   This is always required
@@ -13,9 +15,11 @@ tokens = (
     'DIVIDE',
     'LPAREN',
     'RPAREN',
-    'NUMBER',
+    'NUM',
     'STRING',
     'ID',
+    'TUP2',
+    'TUP3',
     'NEWLINE',
 ) + tuple(reserved.values())
 
@@ -29,7 +33,17 @@ t_EQUALS = r'='
 
 # Regular expression rules for simple tokens
 
-def t_NUMBER(t):
+def t_TUP2(t):
+    r'\(\d+\s\d+\)'
+    t.value = tuple(map(int, t.value[1:-1].split()))
+    return t
+
+def t_TUP3(t):
+    r'\(\d+\s\d+\s\d+\)'
+    t.value = tuple(map(int, t.value[1:-1].split()))
+    return t
+
+def t_NUM(t):
     r'\d+'
     t.value = int(t.value)
     return t
@@ -65,9 +79,14 @@ with open('main.fl', 'r') as file:
     data = file.read()
 lexer.input(data)
 
-# Tokenize
-while True:
-    tok = lexer.token()
-    if not tok:
-        break      # No more input
-    # print(tok)
+if __name__ == '__main__':
+    while True:
+        tok = lexer.token()
+        if not tok:
+            break      # No more input
+        print(tok)
+else:
+    while True:
+        tok = lexer.token()
+        if not tok:
+            break      # No more input

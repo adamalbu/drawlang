@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDEDIVIDE EQUALS ID LPAREN MINUS NEWLINE NUMBER PAINT PLUS RPAREN STRING TIMESprogram : program command\n               | commandcommand : PAINT expressioncommand : ID EQUALS expressionexpression : IDexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expression\n                  | NUMBERexpression : LPAREN expression RPARENexpression : STRING'
+_lr_signature = 'leftPLUSMINUSleftTIMESDIVIDECANVAS DIVIDE EQUALS FILL ID LPAREN MINUS NEWLINE NUM PLUS RPAREN SKETCH STRING TIMES TUP2 TUP3start : setup program\n             | setupsetup : setup_cmd setup\n             | setup_cmdprogram : program command\n               | commandsetup_cmd : CANVAS STRING TUP2command : FILL STRINGcommand : SKETCH expressioncommand : ID EQUALS expressionexpression : IDexpression : expression PLUS expression\n                  | expression MINUS expression\n                  | expression TIMES expression\n                  | expression DIVIDE expression\n                  | NUMexpression : LPAREN expression RPARENexpression : STRINGgroup3 : LPAREN NUM NUM NUM RPAREN\n              | NUM NUM NUM'
     
-_lr_action_items = {'PAINT':([0,1,2,5,6,7,8,10,17,18,19,20,21,22,],[3,3,-2,-1,-3,-5,-10,-12,-4,-6,-7,-8,-9,-11,]),'ID':([0,1,2,3,5,6,7,8,9,10,11,12,13,14,15,17,18,19,20,21,22,],[4,4,-2,7,-1,-3,-5,-10,7,-12,7,7,7,7,7,-4,-6,-7,-8,-9,-11,]),'$end':([1,2,5,6,7,8,10,17,18,19,20,21,22,],[0,-2,-1,-3,-5,-10,-12,-4,-6,-7,-8,-9,-11,]),'NUMBER':([3,9,11,12,13,14,15,],[8,8,8,8,8,8,8,]),'LPAREN':([3,9,11,12,13,14,15,],[9,9,9,9,9,9,9,]),'STRING':([3,9,11,12,13,14,15,],[10,10,10,10,10,10,10,]),'EQUALS':([4,],[11,]),'PLUS':([6,7,8,10,16,17,18,19,20,21,22,],[12,-5,-10,-12,12,12,-6,-7,-8,-9,-11,]),'MINUS':([6,7,8,10,16,17,18,19,20,21,22,],[13,-5,-10,-12,13,13,-6,-7,-8,-9,-11,]),'TIMES':([6,7,8,10,16,17,18,19,20,21,22,],[14,-5,-10,-12,14,14,14,14,-8,-9,-11,]),'DIVIDE':([6,7,8,10,16,17,18,19,20,21,22,],[15,-5,-10,-12,15,15,15,15,-8,-9,-11,]),'RPAREN':([7,8,10,16,18,19,20,21,22,],[-5,-10,-12,22,-6,-7,-8,-9,-11,]),}
+_lr_action_items = {'CANVAS':([0,3,20,],[4,4,-7,]),'$end':([1,2,3,5,6,10,12,13,14,15,16,18,20,26,27,28,29,30,31,],[0,-2,-4,-1,-6,-3,-5,-8,-9,-11,-16,-18,-7,-10,-12,-13,-14,-15,-17,]),'FILL':([2,3,5,6,10,12,13,14,15,16,18,20,26,27,28,29,30,31,],[7,-4,7,-6,-3,-5,-8,-9,-11,-16,-18,-7,-10,-12,-13,-14,-15,-17,]),'SKETCH':([2,3,5,6,10,12,13,14,15,16,18,20,26,27,28,29,30,31,],[8,-4,8,-6,-3,-5,-8,-9,-11,-16,-18,-7,-10,-12,-13,-14,-15,-17,]),'ID':([2,3,5,6,8,10,12,13,14,15,16,17,18,19,20,21,22,23,24,26,27,28,29,30,31,],[9,-4,9,-6,15,-3,-5,-8,-9,-11,-16,15,-18,15,-7,15,15,15,15,-10,-12,-13,-14,-15,-17,]),'STRING':([4,7,8,17,19,21,22,23,24,],[11,13,18,18,18,18,18,18,18,]),'NUM':([8,17,19,21,22,23,24,],[16,16,16,16,16,16,16,]),'LPAREN':([8,17,19,21,22,23,24,],[17,17,17,17,17,17,17,]),'EQUALS':([9,],[19,]),'TUP2':([11,],[20,]),'PLUS':([14,15,16,18,25,26,27,28,29,30,31,],[21,-11,-16,-18,21,21,-12,-13,-14,-15,-17,]),'MINUS':([14,15,16,18,25,26,27,28,29,30,31,],[22,-11,-16,-18,22,22,-12,-13,-14,-15,-17,]),'TIMES':([14,15,16,18,25,26,27,28,29,30,31,],[23,-11,-16,-18,23,23,23,23,-14,-15,-17,]),'DIVIDE':([14,15,16,18,25,26,27,28,29,30,31,],[24,-11,-16,-18,24,24,24,24,-14,-15,-17,]),'RPAREN':([15,16,18,25,27,28,29,30,31,],[-11,-16,-18,31,-12,-13,-14,-15,-17,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'program':([0,],[1,]),'command':([0,1,],[2,5,]),'expression':([3,9,11,12,13,14,15,],[6,16,17,18,19,20,21,]),}
+_lr_goto_items = {'start':([0,],[1,]),'setup':([0,3,],[2,10,]),'setup_cmd':([0,3,],[3,3,]),'program':([2,],[5,]),'command':([2,5,],[6,12,]),'expression':([8,17,19,21,22,23,24,],[14,25,26,27,28,29,30,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,17 +26,25 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> program","S'",1,None,None,None),
-  ('program -> program command','program',2,'p_program','yacc.py',14),
-  ('program -> command','program',1,'p_program','yacc.py',15),
-  ('command -> PAINT expression','command',2,'p_paint','yacc.py',28),
-  ('command -> ID EQUALS expression','command',3,'p_assign','yacc.py',38),
-  ('expression -> ID','expression',1,'p_load','yacc.py',45),
-  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','yacc.py',49),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','yacc.py',50),
-  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','yacc.py',51),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','yacc.py',52),
-  ('expression -> NUMBER','expression',1,'p_expression_binop','yacc.py',53),
-  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','yacc.py',69),
-  ('expression -> STRING','expression',1,'p_expression_string','yacc.py',74),
+  ("S' -> start","S'",1,None,None,None),
+  ('start -> setup program','start',2,'p_start','yacc.py',53),
+  ('start -> setup','start',1,'p_start','yacc.py',54),
+  ('setup -> setup_cmd setup','setup',2,'p_setup','yacc.py',164),
+  ('setup -> setup_cmd','setup',1,'p_setup','yacc.py',165),
+  ('program -> program command','program',2,'p_program','yacc.py',175),
+  ('program -> command','program',1,'p_program','yacc.py',176),
+  ('setup_cmd -> CANVAS STRING TUP2','setup_cmd',3,'p_canvas','yacc.py',183),
+  ('command -> FILL STRING','command',2,'p_fill','yacc.py',187),
+  ('command -> SKETCH expression','command',2,'p_sketch','yacc.py',201),
+  ('command -> ID EQUALS expression','command',3,'p_assign','yacc.py',211),
+  ('expression -> ID','expression',1,'p_load','yacc.py',218),
+  ('expression -> expression PLUS expression','expression',3,'p_expression_binop','yacc.py',222),
+  ('expression -> expression MINUS expression','expression',3,'p_expression_binop','yacc.py',223),
+  ('expression -> expression TIMES expression','expression',3,'p_expression_binop','yacc.py',224),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression_binop','yacc.py',225),
+  ('expression -> NUM','expression',1,'p_expression_binop','yacc.py',226),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','yacc.py',242),
+  ('expression -> STRING','expression',1,'p_expression_string','yacc.py',246),
+  ('group3 -> LPAREN NUM NUM NUM RPAREN','group3',5,'p_group_tup3','yacc.py',250),
+  ('group3 -> NUM NUM NUM','group3',3,'p_group_tup3','yacc.py',251),
 ]

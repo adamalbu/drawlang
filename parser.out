@@ -3,424 +3,550 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     NEWLINE
+    TUP3
 
 Grammar
 
-Rule 0     S' -> program
-Rule 1     program -> program command
-Rule 2     program -> command
-Rule 3     command -> PAINT expression
-Rule 4     command -> ID EQUALS expression
-Rule 5     expression -> ID
-Rule 6     expression -> expression PLUS expression
-Rule 7     expression -> expression MINUS expression
-Rule 8     expression -> expression TIMES expression
-Rule 9     expression -> expression DIVIDE expression
-Rule 10    expression -> NUMBER
-Rule 11    expression -> LPAREN expression RPAREN
-Rule 12    expression -> STRING
+Rule 0     S' -> start
+Rule 1     start -> setup program
+Rule 2     start -> setup
+Rule 3     setup -> setup_cmd setup
+Rule 4     setup -> setup_cmd
+Rule 5     program -> program command
+Rule 6     program -> command
+Rule 7     setup_cmd -> CANVAS STRING TUP2
+Rule 8     command -> FILL STRING
+Rule 9     command -> SKETCH expression
+Rule 10    command -> ID EQUALS expression
+Rule 11    expression -> ID
+Rule 12    expression -> expression PLUS expression
+Rule 13    expression -> expression MINUS expression
+Rule 14    expression -> expression TIMES expression
+Rule 15    expression -> expression DIVIDE expression
+Rule 16    expression -> NUM
+Rule 17    expression -> LPAREN expression RPAREN
+Rule 18    expression -> STRING
+Rule 19    group3 -> LPAREN NUM NUM NUM RPAREN
+Rule 20    group3 -> NUM NUM NUM
 
 Terminals, with rules where they appear
 
-DIVIDE               : 9
-EQUALS               : 4
-ID                   : 4 5
-LPAREN               : 11
-MINUS                : 7
+CANVAS               : 7
+DIVIDE               : 15
+EQUALS               : 10
+FILL                 : 8
+ID                   : 10 11
+LPAREN               : 17 19
+MINUS                : 13
 NEWLINE              : 
-NUMBER               : 10
-PAINT                : 3
-PLUS                 : 6
-RPAREN               : 11
-STRING               : 12
-TIMES                : 8
+NUM                  : 16 19 19 19 20 20 20
+PLUS                 : 12
+RPAREN               : 17 19
+SKETCH               : 9
+STRING               : 7 8 18
+TIMES                : 14
+TUP2                 : 7
+TUP3                 : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-command              : 1 2
-expression           : 3 4 6 6 7 7 8 8 9 9 11
-program              : 1 0
+command              : 5 6
+expression           : 9 10 12 12 13 13 14 14 15 15 17
+group3               : 
+program              : 1 5
+setup                : 1 2 3
+setup_cmd            : 3 4
+start                : 0
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . program
-    (1) program -> . program command
-    (2) program -> . command
-    (3) command -> . PAINT expression
-    (4) command -> . ID EQUALS expression
+    (0) S' -> . start
+    (1) start -> . setup program
+    (2) start -> . setup
+    (3) setup -> . setup_cmd setup
+    (4) setup -> . setup_cmd
+    (7) setup_cmd -> . CANVAS STRING TUP2
 
-    PAINT           shift and go to state 3
-    ID              shift and go to state 4
+    CANVAS          shift and go to state 4
 
-    program                        shift and go to state 1
-    command                        shift and go to state 2
+    start                          shift and go to state 1
+    setup                          shift and go to state 2
+    setup_cmd                      shift and go to state 3
 
 state 1
 
-    (0) S' -> program .
-    (1) program -> program . command
-    (3) command -> . PAINT expression
-    (4) command -> . ID EQUALS expression
+    (0) S' -> start .
 
-    PAINT           shift and go to state 3
-    ID              shift and go to state 4
 
-    command                        shift and go to state 5
 
 state 2
 
-    (2) program -> command .
+    (1) start -> setup . program
+    (2) start -> setup .
+    (5) program -> . program command
+    (6) program -> . command
+    (8) command -> . FILL STRING
+    (9) command -> . SKETCH expression
+    (10) command -> . ID EQUALS expression
 
-    PAINT           reduce using rule 2 (program -> command .)
-    ID              reduce using rule 2 (program -> command .)
-    $end            reduce using rule 2 (program -> command .)
+    $end            reduce using rule 2 (start -> setup .)
+    FILL            shift and go to state 7
+    SKETCH          shift and go to state 8
+    ID              shift and go to state 9
 
+    program                        shift and go to state 5
+    command                        shift and go to state 6
 
 state 3
 
-    (3) command -> PAINT . expression
-    (5) expression -> . ID
-    (6) expression -> . expression PLUS expression
-    (7) expression -> . expression MINUS expression
-    (8) expression -> . expression TIMES expression
-    (9) expression -> . expression DIVIDE expression
-    (10) expression -> . NUMBER
-    (11) expression -> . LPAREN expression RPAREN
-    (12) expression -> . STRING
+    (3) setup -> setup_cmd . setup
+    (4) setup -> setup_cmd .
+    (3) setup -> . setup_cmd setup
+    (4) setup -> . setup_cmd
+    (7) setup_cmd -> . CANVAS STRING TUP2
 
-    ID              shift and go to state 7
-    NUMBER          shift and go to state 8
-    LPAREN          shift and go to state 9
-    STRING          shift and go to state 10
+    FILL            reduce using rule 4 (setup -> setup_cmd .)
+    SKETCH          reduce using rule 4 (setup -> setup_cmd .)
+    ID              reduce using rule 4 (setup -> setup_cmd .)
+    $end            reduce using rule 4 (setup -> setup_cmd .)
+    CANVAS          shift and go to state 4
 
-    expression                     shift and go to state 6
+    setup_cmd                      shift and go to state 3
+    setup                          shift and go to state 10
 
 state 4
 
-    (4) command -> ID . EQUALS expression
+    (7) setup_cmd -> CANVAS . STRING TUP2
 
-    EQUALS          shift and go to state 11
+    STRING          shift and go to state 11
 
 
 state 5
 
-    (1) program -> program command .
+    (1) start -> setup program .
+    (5) program -> program . command
+    (8) command -> . FILL STRING
+    (9) command -> . SKETCH expression
+    (10) command -> . ID EQUALS expression
 
-    PAINT           reduce using rule 1 (program -> program command .)
-    ID              reduce using rule 1 (program -> program command .)
-    $end            reduce using rule 1 (program -> program command .)
+    $end            reduce using rule 1 (start -> setup program .)
+    FILL            shift and go to state 7
+    SKETCH          shift and go to state 8
+    ID              shift and go to state 9
 
+    command                        shift and go to state 12
 
 state 6
 
-    (3) command -> PAINT expression .
-    (6) expression -> expression . PLUS expression
-    (7) expression -> expression . MINUS expression
-    (8) expression -> expression . TIMES expression
-    (9) expression -> expression . DIVIDE expression
+    (6) program -> command .
 
-    PAINT           reduce using rule 3 (command -> PAINT expression .)
-    ID              reduce using rule 3 (command -> PAINT expression .)
-    $end            reduce using rule 3 (command -> PAINT expression .)
-    PLUS            shift and go to state 12
-    MINUS           shift and go to state 13
-    TIMES           shift and go to state 14
-    DIVIDE          shift and go to state 15
+    FILL            reduce using rule 6 (program -> command .)
+    SKETCH          reduce using rule 6 (program -> command .)
+    ID              reduce using rule 6 (program -> command .)
+    $end            reduce using rule 6 (program -> command .)
 
 
 state 7
 
-    (5) expression -> ID .
+    (8) command -> FILL . STRING
 
-    PLUS            reduce using rule 5 (expression -> ID .)
-    MINUS           reduce using rule 5 (expression -> ID .)
-    TIMES           reduce using rule 5 (expression -> ID .)
-    DIVIDE          reduce using rule 5 (expression -> ID .)
-    PAINT           reduce using rule 5 (expression -> ID .)
-    ID              reduce using rule 5 (expression -> ID .)
-    $end            reduce using rule 5 (expression -> ID .)
-    RPAREN          reduce using rule 5 (expression -> ID .)
+    STRING          shift and go to state 13
 
 
 state 8
 
-    (10) expression -> NUMBER .
+    (9) command -> SKETCH . expression
+    (11) expression -> . ID
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUM
+    (17) expression -> . LPAREN expression RPAREN
+    (18) expression -> . STRING
 
-    PLUS            reduce using rule 10 (expression -> NUMBER .)
-    MINUS           reduce using rule 10 (expression -> NUMBER .)
-    TIMES           reduce using rule 10 (expression -> NUMBER .)
-    DIVIDE          reduce using rule 10 (expression -> NUMBER .)
-    PAINT           reduce using rule 10 (expression -> NUMBER .)
-    ID              reduce using rule 10 (expression -> NUMBER .)
-    $end            reduce using rule 10 (expression -> NUMBER .)
-    RPAREN          reduce using rule 10 (expression -> NUMBER .)
+    ID              shift and go to state 15
+    NUM             shift and go to state 16
+    LPAREN          shift and go to state 17
+    STRING          shift and go to state 18
 
+    expression                     shift and go to state 14
 
 state 9
 
-    (11) expression -> LPAREN . expression RPAREN
-    (5) expression -> . ID
-    (6) expression -> . expression PLUS expression
-    (7) expression -> . expression MINUS expression
-    (8) expression -> . expression TIMES expression
-    (9) expression -> . expression DIVIDE expression
-    (10) expression -> . NUMBER
-    (11) expression -> . LPAREN expression RPAREN
-    (12) expression -> . STRING
+    (10) command -> ID . EQUALS expression
 
-    ID              shift and go to state 7
-    NUMBER          shift and go to state 8
-    LPAREN          shift and go to state 9
-    STRING          shift and go to state 10
+    EQUALS          shift and go to state 19
 
-    expression                     shift and go to state 16
 
 state 10
 
-    (12) expression -> STRING .
+    (3) setup -> setup_cmd setup .
 
-    PLUS            reduce using rule 12 (expression -> STRING .)
-    MINUS           reduce using rule 12 (expression -> STRING .)
-    TIMES           reduce using rule 12 (expression -> STRING .)
-    DIVIDE          reduce using rule 12 (expression -> STRING .)
-    PAINT           reduce using rule 12 (expression -> STRING .)
-    ID              reduce using rule 12 (expression -> STRING .)
-    $end            reduce using rule 12 (expression -> STRING .)
-    RPAREN          reduce using rule 12 (expression -> STRING .)
+    FILL            reduce using rule 3 (setup -> setup_cmd setup .)
+    SKETCH          reduce using rule 3 (setup -> setup_cmd setup .)
+    ID              reduce using rule 3 (setup -> setup_cmd setup .)
+    $end            reduce using rule 3 (setup -> setup_cmd setup .)
 
 
 state 11
 
-    (4) command -> ID EQUALS . expression
-    (5) expression -> . ID
-    (6) expression -> . expression PLUS expression
-    (7) expression -> . expression MINUS expression
-    (8) expression -> . expression TIMES expression
-    (9) expression -> . expression DIVIDE expression
-    (10) expression -> . NUMBER
-    (11) expression -> . LPAREN expression RPAREN
-    (12) expression -> . STRING
+    (7) setup_cmd -> CANVAS STRING . TUP2
 
-    ID              shift and go to state 7
-    NUMBER          shift and go to state 8
-    LPAREN          shift and go to state 9
-    STRING          shift and go to state 10
+    TUP2            shift and go to state 20
 
-    expression                     shift and go to state 17
 
 state 12
 
-    (6) expression -> expression PLUS . expression
-    (5) expression -> . ID
-    (6) expression -> . expression PLUS expression
-    (7) expression -> . expression MINUS expression
-    (8) expression -> . expression TIMES expression
-    (9) expression -> . expression DIVIDE expression
-    (10) expression -> . NUMBER
-    (11) expression -> . LPAREN expression RPAREN
-    (12) expression -> . STRING
+    (5) program -> program command .
 
-    ID              shift and go to state 7
-    NUMBER          shift and go to state 8
-    LPAREN          shift and go to state 9
-    STRING          shift and go to state 10
+    FILL            reduce using rule 5 (program -> program command .)
+    SKETCH          reduce using rule 5 (program -> program command .)
+    ID              reduce using rule 5 (program -> program command .)
+    $end            reduce using rule 5 (program -> program command .)
 
-    expression                     shift and go to state 18
 
 state 13
 
-    (7) expression -> expression MINUS . expression
-    (5) expression -> . ID
-    (6) expression -> . expression PLUS expression
-    (7) expression -> . expression MINUS expression
-    (8) expression -> . expression TIMES expression
-    (9) expression -> . expression DIVIDE expression
-    (10) expression -> . NUMBER
-    (11) expression -> . LPAREN expression RPAREN
-    (12) expression -> . STRING
+    (8) command -> FILL STRING .
 
-    ID              shift and go to state 7
-    NUMBER          shift and go to state 8
-    LPAREN          shift and go to state 9
-    STRING          shift and go to state 10
+    FILL            reduce using rule 8 (command -> FILL STRING .)
+    SKETCH          reduce using rule 8 (command -> FILL STRING .)
+    ID              reduce using rule 8 (command -> FILL STRING .)
+    $end            reduce using rule 8 (command -> FILL STRING .)
 
-    expression                     shift and go to state 19
 
 state 14
 
-    (8) expression -> expression TIMES . expression
-    (5) expression -> . ID
-    (6) expression -> . expression PLUS expression
-    (7) expression -> . expression MINUS expression
-    (8) expression -> . expression TIMES expression
-    (9) expression -> . expression DIVIDE expression
-    (10) expression -> . NUMBER
-    (11) expression -> . LPAREN expression RPAREN
-    (12) expression -> . STRING
+    (9) command -> SKETCH expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
 
-    ID              shift and go to state 7
-    NUMBER          shift and go to state 8
-    LPAREN          shift and go to state 9
-    STRING          shift and go to state 10
+    FILL            reduce using rule 9 (command -> SKETCH expression .)
+    SKETCH          reduce using rule 9 (command -> SKETCH expression .)
+    ID              reduce using rule 9 (command -> SKETCH expression .)
+    $end            reduce using rule 9 (command -> SKETCH expression .)
+    PLUS            shift and go to state 21
+    MINUS           shift and go to state 22
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 24
 
-    expression                     shift and go to state 20
 
 state 15
 
-    (9) expression -> expression DIVIDE . expression
-    (5) expression -> . ID
-    (6) expression -> . expression PLUS expression
-    (7) expression -> . expression MINUS expression
-    (8) expression -> . expression TIMES expression
-    (9) expression -> . expression DIVIDE expression
-    (10) expression -> . NUMBER
-    (11) expression -> . LPAREN expression RPAREN
-    (12) expression -> . STRING
+    (11) expression -> ID .
 
-    ID              shift and go to state 7
-    NUMBER          shift and go to state 8
-    LPAREN          shift and go to state 9
-    STRING          shift and go to state 10
+    PLUS            reduce using rule 11 (expression -> ID .)
+    MINUS           reduce using rule 11 (expression -> ID .)
+    TIMES           reduce using rule 11 (expression -> ID .)
+    DIVIDE          reduce using rule 11 (expression -> ID .)
+    FILL            reduce using rule 11 (expression -> ID .)
+    SKETCH          reduce using rule 11 (expression -> ID .)
+    ID              reduce using rule 11 (expression -> ID .)
+    $end            reduce using rule 11 (expression -> ID .)
+    RPAREN          reduce using rule 11 (expression -> ID .)
 
-    expression                     shift and go to state 21
 
 state 16
 
-    (11) expression -> LPAREN expression . RPAREN
-    (6) expression -> expression . PLUS expression
-    (7) expression -> expression . MINUS expression
-    (8) expression -> expression . TIMES expression
-    (9) expression -> expression . DIVIDE expression
+    (16) expression -> NUM .
 
-    RPAREN          shift and go to state 22
-    PLUS            shift and go to state 12
-    MINUS           shift and go to state 13
-    TIMES           shift and go to state 14
-    DIVIDE          shift and go to state 15
+    PLUS            reduce using rule 16 (expression -> NUM .)
+    MINUS           reduce using rule 16 (expression -> NUM .)
+    TIMES           reduce using rule 16 (expression -> NUM .)
+    DIVIDE          reduce using rule 16 (expression -> NUM .)
+    FILL            reduce using rule 16 (expression -> NUM .)
+    SKETCH          reduce using rule 16 (expression -> NUM .)
+    ID              reduce using rule 16 (expression -> NUM .)
+    $end            reduce using rule 16 (expression -> NUM .)
+    RPAREN          reduce using rule 16 (expression -> NUM .)
 
 
 state 17
 
-    (4) command -> ID EQUALS expression .
-    (6) expression -> expression . PLUS expression
-    (7) expression -> expression . MINUS expression
-    (8) expression -> expression . TIMES expression
-    (9) expression -> expression . DIVIDE expression
+    (17) expression -> LPAREN . expression RPAREN
+    (11) expression -> . ID
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUM
+    (17) expression -> . LPAREN expression RPAREN
+    (18) expression -> . STRING
 
-    PAINT           reduce using rule 4 (command -> ID EQUALS expression .)
-    ID              reduce using rule 4 (command -> ID EQUALS expression .)
-    $end            reduce using rule 4 (command -> ID EQUALS expression .)
-    PLUS            shift and go to state 12
-    MINUS           shift and go to state 13
-    TIMES           shift and go to state 14
-    DIVIDE          shift and go to state 15
+    ID              shift and go to state 15
+    NUM             shift and go to state 16
+    LPAREN          shift and go to state 17
+    STRING          shift and go to state 18
 
+    expression                     shift and go to state 25
 
 state 18
 
-    (6) expression -> expression PLUS expression .
-    (6) expression -> expression . PLUS expression
-    (7) expression -> expression . MINUS expression
-    (8) expression -> expression . TIMES expression
-    (9) expression -> expression . DIVIDE expression
+    (18) expression -> STRING .
 
-    PLUS            reduce using rule 6 (expression -> expression PLUS expression .)
-    MINUS           reduce using rule 6 (expression -> expression PLUS expression .)
-    PAINT           reduce using rule 6 (expression -> expression PLUS expression .)
-    ID              reduce using rule 6 (expression -> expression PLUS expression .)
-    $end            reduce using rule 6 (expression -> expression PLUS expression .)
-    RPAREN          reduce using rule 6 (expression -> expression PLUS expression .)
-    TIMES           shift and go to state 14
-    DIVIDE          shift and go to state 15
-
-  ! TIMES           [ reduce using rule 6 (expression -> expression PLUS expression .) ]
-  ! DIVIDE          [ reduce using rule 6 (expression -> expression PLUS expression .) ]
-  ! PLUS            [ shift and go to state 12 ]
-  ! MINUS           [ shift and go to state 13 ]
+    PLUS            reduce using rule 18 (expression -> STRING .)
+    MINUS           reduce using rule 18 (expression -> STRING .)
+    TIMES           reduce using rule 18 (expression -> STRING .)
+    DIVIDE          reduce using rule 18 (expression -> STRING .)
+    FILL            reduce using rule 18 (expression -> STRING .)
+    SKETCH          reduce using rule 18 (expression -> STRING .)
+    ID              reduce using rule 18 (expression -> STRING .)
+    $end            reduce using rule 18 (expression -> STRING .)
+    RPAREN          reduce using rule 18 (expression -> STRING .)
 
 
 state 19
 
-    (7) expression -> expression MINUS expression .
-    (6) expression -> expression . PLUS expression
-    (7) expression -> expression . MINUS expression
-    (8) expression -> expression . TIMES expression
-    (9) expression -> expression . DIVIDE expression
+    (10) command -> ID EQUALS . expression
+    (11) expression -> . ID
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUM
+    (17) expression -> . LPAREN expression RPAREN
+    (18) expression -> . STRING
 
-    PLUS            reduce using rule 7 (expression -> expression MINUS expression .)
-    MINUS           reduce using rule 7 (expression -> expression MINUS expression .)
-    PAINT           reduce using rule 7 (expression -> expression MINUS expression .)
-    ID              reduce using rule 7 (expression -> expression MINUS expression .)
-    $end            reduce using rule 7 (expression -> expression MINUS expression .)
-    RPAREN          reduce using rule 7 (expression -> expression MINUS expression .)
-    TIMES           shift and go to state 14
-    DIVIDE          shift and go to state 15
+    ID              shift and go to state 15
+    NUM             shift and go to state 16
+    LPAREN          shift and go to state 17
+    STRING          shift and go to state 18
 
-  ! TIMES           [ reduce using rule 7 (expression -> expression MINUS expression .) ]
-  ! DIVIDE          [ reduce using rule 7 (expression -> expression MINUS expression .) ]
-  ! PLUS            [ shift and go to state 12 ]
-  ! MINUS           [ shift and go to state 13 ]
-
+    expression                     shift and go to state 26
 
 state 20
 
-    (8) expression -> expression TIMES expression .
-    (6) expression -> expression . PLUS expression
-    (7) expression -> expression . MINUS expression
-    (8) expression -> expression . TIMES expression
-    (9) expression -> expression . DIVIDE expression
+    (7) setup_cmd -> CANVAS STRING TUP2 .
 
-    PLUS            reduce using rule 8 (expression -> expression TIMES expression .)
-    MINUS           reduce using rule 8 (expression -> expression TIMES expression .)
-    TIMES           reduce using rule 8 (expression -> expression TIMES expression .)
-    DIVIDE          reduce using rule 8 (expression -> expression TIMES expression .)
-    PAINT           reduce using rule 8 (expression -> expression TIMES expression .)
-    ID              reduce using rule 8 (expression -> expression TIMES expression .)
-    $end            reduce using rule 8 (expression -> expression TIMES expression .)
-    RPAREN          reduce using rule 8 (expression -> expression TIMES expression .)
-
-  ! PLUS            [ shift and go to state 12 ]
-  ! MINUS           [ shift and go to state 13 ]
-  ! TIMES           [ shift and go to state 14 ]
-  ! DIVIDE          [ shift and go to state 15 ]
+    CANVAS          reduce using rule 7 (setup_cmd -> CANVAS STRING TUP2 .)
+    FILL            reduce using rule 7 (setup_cmd -> CANVAS STRING TUP2 .)
+    SKETCH          reduce using rule 7 (setup_cmd -> CANVAS STRING TUP2 .)
+    ID              reduce using rule 7 (setup_cmd -> CANVAS STRING TUP2 .)
+    $end            reduce using rule 7 (setup_cmd -> CANVAS STRING TUP2 .)
 
 
 state 21
 
-    (9) expression -> expression DIVIDE expression .
-    (6) expression -> expression . PLUS expression
-    (7) expression -> expression . MINUS expression
-    (8) expression -> expression . TIMES expression
-    (9) expression -> expression . DIVIDE expression
+    (12) expression -> expression PLUS . expression
+    (11) expression -> . ID
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUM
+    (17) expression -> . LPAREN expression RPAREN
+    (18) expression -> . STRING
 
-    PLUS            reduce using rule 9 (expression -> expression DIVIDE expression .)
-    MINUS           reduce using rule 9 (expression -> expression DIVIDE expression .)
-    TIMES           reduce using rule 9 (expression -> expression DIVIDE expression .)
-    DIVIDE          reduce using rule 9 (expression -> expression DIVIDE expression .)
-    PAINT           reduce using rule 9 (expression -> expression DIVIDE expression .)
-    ID              reduce using rule 9 (expression -> expression DIVIDE expression .)
-    $end            reduce using rule 9 (expression -> expression DIVIDE expression .)
-    RPAREN          reduce using rule 9 (expression -> expression DIVIDE expression .)
+    ID              shift and go to state 15
+    NUM             shift and go to state 16
+    LPAREN          shift and go to state 17
+    STRING          shift and go to state 18
 
-  ! PLUS            [ shift and go to state 12 ]
-  ! MINUS           [ shift and go to state 13 ]
-  ! TIMES           [ shift and go to state 14 ]
-  ! DIVIDE          [ shift and go to state 15 ]
-
+    expression                     shift and go to state 27
 
 state 22
 
-    (11) expression -> LPAREN expression RPAREN .
+    (13) expression -> expression MINUS . expression
+    (11) expression -> . ID
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUM
+    (17) expression -> . LPAREN expression RPAREN
+    (18) expression -> . STRING
 
-    PLUS            reduce using rule 11 (expression -> LPAREN expression RPAREN .)
-    MINUS           reduce using rule 11 (expression -> LPAREN expression RPAREN .)
-    TIMES           reduce using rule 11 (expression -> LPAREN expression RPAREN .)
-    DIVIDE          reduce using rule 11 (expression -> LPAREN expression RPAREN .)
-    PAINT           reduce using rule 11 (expression -> LPAREN expression RPAREN .)
-    ID              reduce using rule 11 (expression -> LPAREN expression RPAREN .)
-    $end            reduce using rule 11 (expression -> LPAREN expression RPAREN .)
-    RPAREN          reduce using rule 11 (expression -> LPAREN expression RPAREN .)
+    ID              shift and go to state 15
+    NUM             shift and go to state 16
+    LPAREN          shift and go to state 17
+    STRING          shift and go to state 18
+
+    expression                     shift and go to state 28
+
+state 23
+
+    (14) expression -> expression TIMES . expression
+    (11) expression -> . ID
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUM
+    (17) expression -> . LPAREN expression RPAREN
+    (18) expression -> . STRING
+
+    ID              shift and go to state 15
+    NUM             shift and go to state 16
+    LPAREN          shift and go to state 17
+    STRING          shift and go to state 18
+
+    expression                     shift and go to state 29
+
+state 24
+
+    (15) expression -> expression DIVIDE . expression
+    (11) expression -> . ID
+    (12) expression -> . expression PLUS expression
+    (13) expression -> . expression MINUS expression
+    (14) expression -> . expression TIMES expression
+    (15) expression -> . expression DIVIDE expression
+    (16) expression -> . NUM
+    (17) expression -> . LPAREN expression RPAREN
+    (18) expression -> . STRING
+
+    ID              shift and go to state 15
+    NUM             shift and go to state 16
+    LPAREN          shift and go to state 17
+    STRING          shift and go to state 18
+
+    expression                     shift and go to state 30
+
+state 25
+
+    (17) expression -> LPAREN expression . RPAREN
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+    RPAREN          shift and go to state 31
+    PLUS            shift and go to state 21
+    MINUS           shift and go to state 22
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 24
+
+
+state 26
+
+    (10) command -> ID EQUALS expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+    FILL            reduce using rule 10 (command -> ID EQUALS expression .)
+    SKETCH          reduce using rule 10 (command -> ID EQUALS expression .)
+    ID              reduce using rule 10 (command -> ID EQUALS expression .)
+    $end            reduce using rule 10 (command -> ID EQUALS expression .)
+    PLUS            shift and go to state 21
+    MINUS           shift and go to state 22
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 24
+
+
+state 27
+
+    (12) expression -> expression PLUS expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+    PLUS            reduce using rule 12 (expression -> expression PLUS expression .)
+    MINUS           reduce using rule 12 (expression -> expression PLUS expression .)
+    FILL            reduce using rule 12 (expression -> expression PLUS expression .)
+    SKETCH          reduce using rule 12 (expression -> expression PLUS expression .)
+    ID              reduce using rule 12 (expression -> expression PLUS expression .)
+    $end            reduce using rule 12 (expression -> expression PLUS expression .)
+    RPAREN          reduce using rule 12 (expression -> expression PLUS expression .)
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 24
+
+  ! TIMES           [ reduce using rule 12 (expression -> expression PLUS expression .) ]
+  ! DIVIDE          [ reduce using rule 12 (expression -> expression PLUS expression .) ]
+  ! PLUS            [ shift and go to state 21 ]
+  ! MINUS           [ shift and go to state 22 ]
+
+
+state 28
+
+    (13) expression -> expression MINUS expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+    PLUS            reduce using rule 13 (expression -> expression MINUS expression .)
+    MINUS           reduce using rule 13 (expression -> expression MINUS expression .)
+    FILL            reduce using rule 13 (expression -> expression MINUS expression .)
+    SKETCH          reduce using rule 13 (expression -> expression MINUS expression .)
+    ID              reduce using rule 13 (expression -> expression MINUS expression .)
+    $end            reduce using rule 13 (expression -> expression MINUS expression .)
+    RPAREN          reduce using rule 13 (expression -> expression MINUS expression .)
+    TIMES           shift and go to state 23
+    DIVIDE          shift and go to state 24
+
+  ! TIMES           [ reduce using rule 13 (expression -> expression MINUS expression .) ]
+  ! DIVIDE          [ reduce using rule 13 (expression -> expression MINUS expression .) ]
+  ! PLUS            [ shift and go to state 21 ]
+  ! MINUS           [ shift and go to state 22 ]
+
+
+state 29
+
+    (14) expression -> expression TIMES expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+    PLUS            reduce using rule 14 (expression -> expression TIMES expression .)
+    MINUS           reduce using rule 14 (expression -> expression TIMES expression .)
+    TIMES           reduce using rule 14 (expression -> expression TIMES expression .)
+    DIVIDE          reduce using rule 14 (expression -> expression TIMES expression .)
+    FILL            reduce using rule 14 (expression -> expression TIMES expression .)
+    SKETCH          reduce using rule 14 (expression -> expression TIMES expression .)
+    ID              reduce using rule 14 (expression -> expression TIMES expression .)
+    $end            reduce using rule 14 (expression -> expression TIMES expression .)
+    RPAREN          reduce using rule 14 (expression -> expression TIMES expression .)
+
+  ! PLUS            [ shift and go to state 21 ]
+  ! MINUS           [ shift and go to state 22 ]
+  ! TIMES           [ shift and go to state 23 ]
+  ! DIVIDE          [ shift and go to state 24 ]
+
+
+state 30
+
+    (15) expression -> expression DIVIDE expression .
+    (12) expression -> expression . PLUS expression
+    (13) expression -> expression . MINUS expression
+    (14) expression -> expression . TIMES expression
+    (15) expression -> expression . DIVIDE expression
+
+    PLUS            reduce using rule 15 (expression -> expression DIVIDE expression .)
+    MINUS           reduce using rule 15 (expression -> expression DIVIDE expression .)
+    TIMES           reduce using rule 15 (expression -> expression DIVIDE expression .)
+    DIVIDE          reduce using rule 15 (expression -> expression DIVIDE expression .)
+    FILL            reduce using rule 15 (expression -> expression DIVIDE expression .)
+    SKETCH          reduce using rule 15 (expression -> expression DIVIDE expression .)
+    ID              reduce using rule 15 (expression -> expression DIVIDE expression .)
+    $end            reduce using rule 15 (expression -> expression DIVIDE expression .)
+    RPAREN          reduce using rule 15 (expression -> expression DIVIDE expression .)
+
+  ! PLUS            [ shift and go to state 21 ]
+  ! MINUS           [ shift and go to state 22 ]
+  ! TIMES           [ shift and go to state 23 ]
+  ! DIVIDE          [ shift and go to state 24 ]
+
+
+state 31
+
+    (17) expression -> LPAREN expression RPAREN .
+
+    PLUS            reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    MINUS           reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    TIMES           reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    DIVIDE          reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    FILL            reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    SKETCH          reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    ID              reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    $end            reduce using rule 17 (expression -> LPAREN expression RPAREN .)
+    RPAREN          reduce using rule 17 (expression -> LPAREN expression RPAREN .)
 
