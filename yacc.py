@@ -1,6 +1,7 @@
 import ply.yacc as yacc
 from lex import tokens
 from colorama import Fore
+from pygame import Color
 import ast
 
 py_ast = ast.Module(body=[], type_ignores=[])
@@ -85,14 +86,45 @@ def p_pos2(p):
     p[0] = ast.parse(f'__pos2__ = {p[2]}').body
 
 def p_col(p):
-    '''command : COL group3
-               | COL STRING'''
+    '''command : COL col_expr'''
+    print("colp2", p[2])
     p[0] = ast.parse(f'__col__ = pygame.Color({p[2]})').body
+    # p[0] = "blue"
+
+def p_col_expr(p):
+    '''col_expr : group3
+                | STRING'''
+    if isinstance(p[1], tuple):
+        p[0] = p[1]
+    else:
+        print("str")
+        p[0] = str(p[1])
 
 def p_circle(p):
-    '''command : CIRCLE NUM'''
-    code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
+    '''command : CIRCLE NUM
+               | CIRCLE NUM group3
+               | CIRCLE NUM STRING
+               | CIRCLE NUM group2
+               | CIRCLE NUM group3 group2
+               | CIRCLE NUM STRING group2'''
+    if len(p) == 3:
+        code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
 pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
+    elif len(p) == 4:
+        code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
+pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
+    elif len(p) == 5:
+        code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
+pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
+    elif len(p) == 6:
+        code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
+pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
+    else:
+        code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
+pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
+    
+    # code = f'''pygame.gfxdraw.aacircle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)
+# pygame.gfxdraw.filled_circle(__screen__, __pos1__[0], __pos1__[1], {p[2]}, __col__)'''
     p[0] = ast.parse(code).body  
 
 def p_fill(p):
